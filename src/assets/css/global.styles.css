@@ -1,0 +1,53 @@
+@import url('bootstrap.min.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body {
+    font-family: 'Roboto';
+    overflow-x: hidden;
+    background-color: #242424;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #242424;
+}
+
+.navbar {
+    background-color: #1a1a1a;
+    width: 100%;
+    display: flex !important;
+    justify-content: space-between;
+    color: #fff;
+    padding: 1rem;
+    position: fixed;
+}
+.navbar .navbar-links a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 12px;
+}
+.navbar .navbar-links .nav-links {
+    border-bottom: 1px solid transparent;
+    padding-bottom: 10px;
+    transition: .75s;
+}
+.navbar .navbar-links .nav-links:hover {
+    border-bottom: 1px solid #fff;
+    transition: .5s;
+}
+
+
+/* HOME */
+
