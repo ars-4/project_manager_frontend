@@ -3,6 +3,14 @@ A simple and easy to use project managment system made using django_rest_framewo
 
 <br>
 
+![project view](/screenshots/project_view.png?raw=true)
+
+![salary invoice creation view](/screenshots/invoice_creation_view.png?raw=true)
+
+![salary invoice view](/screenshots/invoice_view.png?raw=true)
+
+<br>
+
 ## Project setup
 ```
 npm install

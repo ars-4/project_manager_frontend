@@ -19,7 +19,7 @@
                     <br>
                     <button class="btn btn-primary" @click="update_user">Update</button>
                     <button class="btn btn-danger" @click="reload">Delete</button>&nbsp;&nbsp;
-                    <button class="btn btn-success" @click="update_user">+ Invoice</button>
+                    <a @click="$router.push(`/employee/invoice/create/${user.id}`)" class="btn btn-success">+ Invoice</a>
                     <button class="btn btn-primary" @click="reload">Last Invoice</button>
                 </div>
                 <div class="col-md-1"></div>
