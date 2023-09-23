@@ -1,8 +1,13 @@
 <template>
     <div class="project text-light">
-        <h1>Project: {{ project.title.slice(0, 1).toUpperCase() }}{{ project.title.slice(1) }}
-            <span @click="this.$router.push(`/task/create/${project.id}`)">+ <span>Task</span></span>
-        </h1>
+        <div class="heading">
+            <h1>Project: {{ project.title.slice(0, 1).toUpperCase() }}{{ project.title.slice(1) }}</h1>
+            <div class="group">
+                <span class="btn btn-primary" @click="this.$router.push(`/project/invoice/create/${project.id}`)">+ <span>Invoice</span></span>
+                &nbsp;
+                <span class="btn btn-primary" @click="this.$router.push(`/task/create/${project.id}`)">+ <span>Task</span></span>
+            </div>
+        </div>
         <hr>
         <!-- <h4>The Information:</h4> -->
         <div class="project_info">
@@ -79,20 +84,19 @@
 
 
 <style>
+.project .heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-.project h1:nth-child(1) span {
-    float: right;
-    margin-top: 10px;
-    font-size: 30px;
-    background-color: var(--bs-primary);
-    padding: 5px 10px;
-    border-radius: 4px;
+.project .heading span {
     cursor: pointer;
 }
-.project h1:nth-child(1) span span {
+
+.project .heading span span {
     font-size: 14px;
     margin-top: 1px;
-    padding: 10px;
 }
 
 .project .project_info {
@@ -179,13 +183,14 @@
     background-color: rgba(24, 24, 24, 0.6);
     border-radius: 4px;
     text-align: center;
-    position:absolute;
+    position: absolute;
     top: -20%;
     transition: 0.5s;
     left: 40%;
     width: 30%;
     backdrop-filter: blur(5px);
 }
+
 .task-read-modal .close-btn {
     position: absolute;
     top: 10px;
@@ -224,8 +229,8 @@ export default defineComponent({
             console.log(this.task)
         },
 
-        change_status: function(i) {
-            if(i === '0') {
+        change_status: function (i) {
+            if (i === '0') {
                 this.task = 'closed'
             } else {
                 this.task = 'opened'
@@ -254,10 +259,10 @@ export default defineComponent({
                         name: data['members_username'][i]
                     })
                 }
-            }).then(() => { this.get_tasks();}).catch(e => { throw new Error(e) })
+            }).then(() => { this.get_tasks(); }).catch(e => { throw new Error(e) })
         },
 
-        get_duration: function(start, end) {
+        get_duration: function (start, end) {
             let d_ = start.split('-')
             let e_ = end.split('-')
             let yrs = (Number(e_[0]) - Number(d_[0])) * 365
@@ -315,12 +320,12 @@ export default defineComponent({
             }
         },
 
-        read_task_details: function(task) {
+        read_task_details: function (task) {
             let modal = document.getElementById('task_read_modal');
             // console.log(modal.style.top)
             this.task_read.title = task.title;
             this.task_read.description = task.description;
-            if(modal.style.top === "-100%" || modal.style.top !== "30%") {
+            if (modal.style.top === "-100%" || modal.style.top !== "30%") {
                 modal.style.top = "30%"
             } else {
                 modal.style.top = "-100%"
