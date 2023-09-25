@@ -71,7 +71,7 @@ export default defineComponent({
                 for (let employee of data) {
                     this.employees.push({
                         'id': employee['id'],
-                        'name': employee['employee_username']
+                        'name': employee['username']
                     })
                 }
             }).catch(e => { console.error(e) })
@@ -84,7 +84,7 @@ export default defineComponent({
                 method: 'post',
                 headers: {'Content-Type': 'application/json', 'Authorization':`Token ${localStorage.getItem('token')}`},
                 body: JSON.stringify(this.task)
-            }).then(res=>{console.log(res.json()); this.$router.push('/')}).catch(e=>{console.error(e)})
+            }).then(res=>{console.log(res.json()); this.$router.go(-1)}).catch(e=>{console.error(e)})
         }
 
     },

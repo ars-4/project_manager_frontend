@@ -49,7 +49,7 @@
             <div class="col-md-3 text-light card previous">
                 <h4>Employee Previous Invoices</h4>
                 <ul>
-                    <li v-for="invoice in invoices" :key="invoice">{{ `${invoice.date_created.split('T')[0].split('-')[1]}/${invoice.date_created.split('T')[0].split('-')[2]}` }} - {{ invoice.amount }} - <a href="#">view</a></li>
+                    <li v-for="invoice in invoices" :key="invoice">{{ `${invoice.date_created.split('T')[0].split('-')[1]}/${invoice.date_created.split('T')[0].split('-')[2]}` }} - {{ invoice.amount }} - <a class="text-link" @click="$router.push(`/employee/invoice/read/${invoice.id}/`)">view</a></li>
                 </ul>
                 <a class="special-btn" href="#">view all</a>
             </div>
@@ -142,7 +142,7 @@ export default {
         },
 
         get_previous_invoices: async function () {
-            await fetch(`${this.$api}/salary_invoices/?person=${this.employee.id}`, {
+            await fetch(`${this.$api}/salary_invoices/?employee=${this.employee.id}`, {
                 method: 'get',
                 headers: {
                     'Authorization': `Token ${localStorage.getItem('token')}`
@@ -185,7 +185,7 @@ export default {
                 },
                 body: JSON.stringify({
                     amount: this.invoice_salary,
-                    person: this.employee.id,
+                    employee: this.employee.id,
                     status: 'paid',
                     previous_dues: 0,
                     title: 'Salary Invoice',

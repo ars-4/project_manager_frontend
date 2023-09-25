@@ -13,7 +13,7 @@
                     </tr>
                     <tr v-for="employee in employees" :key="employee.id">
                         <td>{{ employee.id }}</td>
-                        <td>{{ employee.username }}</td>
+                        <td @click="$router.push(`/employee/${employee.id}`)">{{ employee.username }}</td>
                         <td>{{ employee.designation }}</td>
                         <td>
                             <button class="btn btn-dark" @click="show_actions(employee.id)">:</button>
@@ -181,13 +181,7 @@ export default defineComponent({
                 }
             }).then(res => { return res.json() }).then(
                 data => {
-                    for (let dt of data) {
-                        this.employees.push({
-                            "id": dt['id'],
-                            "username": dt['employee_username'],
-                            "designation": dt['designation']
-                        })
-                    }
+                    this.employees = data;
                 })
         },
 
@@ -211,7 +205,7 @@ export default defineComponent({
                         this.attendances.push({
                             "id": dt['id'],
                             "status": dt['status'],
-                            "employee": dt['employee_username'],
+                            "employee": dt['username'],
                             "date": `${date} ${time}`
                         })
                     }

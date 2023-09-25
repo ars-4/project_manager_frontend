@@ -19,6 +19,8 @@
                     <br>
                     <button class="btn btn-primary" @click="update_user">Update</button>
                     <button class="btn btn-danger" @click="reload">Delete</button>
+                    &nbsp;
+                    <a class="btn btn-info" @click="this.$router.push(`/employee/invoice/create/${user.id}`)">+ Invoice</a>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-4 image">
@@ -213,7 +215,7 @@ export default defineComponent({
                 headers: {'Authorization': `Token ${token}`}
             }).then( res=>{return res.json()} ).then(data=>{
                 this.user.id = data['id'];
-                this.user.username = data['employee_username'];
+                this.user.username = data['username'];
                 this.user.first_name = data['first_name'];
                 this.user.last_name = data['last_name'];
                 this.user.email = data['email'];

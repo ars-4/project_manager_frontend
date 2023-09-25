@@ -14,7 +14,7 @@
                 <div class="col-md-6">
                     <div class="special_multiple_select">
                         <span>Select Employees</span>
-                        <select class="form-control" multiple v-model="project.members">
+                        <select class="form-control" multiple v-model="project.employees">
                             <option v-for="employee in employees" :value="employee.id">{{ employee.name }}</option>
                         </select>
                     </div>
@@ -28,10 +28,10 @@
                 </div>
                 <br>
                 <div class="col-md-6">
-                    <input type="number" class="form-control" placeholder="Project Price" v-model="project.price">
+                    <input type="number" class="form-control" placeholder="Project Price" v-model="project.amount">
                 </div>
                 <div class="col-md-6">
-                    <select class="form-control" v-model="project.client">
+                    <select class="form-control" v-model="project.clients" multiple>
                         <option selected value="none">Select Client</option>
                         <option v-for="client in clients" :value="client.id">{{ client.name }}</option>
                     </select>
@@ -110,14 +110,14 @@ export default defineComponent({
 
         get_employees: async function () {
             this.employees = []
-            await fetch(`${this.$api}/employees/`, {
+            await fetch(`${this.$api}/employees/?type=employee`, {
                 method: 'get',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` }
             }).then(res => { return res.json() }).then(data => {
                 for (let employee of data) {
                     this.employees.push({
                         'id': employee['id'],
-                        'name': employee['employee_username']
+                        'name': employee['username']
                     })
                 }
             }).catch(e => { console.error(e) })
