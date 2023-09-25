@@ -215,17 +215,8 @@ export default defineComponent({
                 method:'get',
                 headers: {'Authorization': `Token ${token}`}
             }).then( res=>{return res.json()} ).then(data=>{
-                this.user.id = data['id'];
-                this.user.username = data['employee_username'];
-                this.user.first_name = data['first_name'];
-                this.user.last_name = data['last_name'];
-                this.user.email = data['email'];
-                this.user.mobile = data['mobile'];
-                this.user.address = data['address'];
-                this.user.city = data['city'];
-                this.user.designation = data['designation'];
-                this.user.salary = data['salary'];
-                this.user.profile_picture = this.$baseUri + data['profile_picture'];
+                this.user = data;
+                this.user.profile_picture = this.$baseUri + "/" + data['profile_picture'];
             }).catch(e=>{throw new Error(e)});
             this.get_attendances()
         },
@@ -244,7 +235,6 @@ export default defineComponent({
             await this.get_last_invoice()
             this.get_tasks()
             let today = new Date();
-            // this.one_month_date = `${String(today.getFullYear())}-${String(today.getMonth()).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')} ${String(today.getHours()).padStart(2, '0')}:${today.getMinutes()}:${today.getSeconds()}`
             this.today_date = `${String(today.getFullYear())}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')} ${String(today.getHours()).padStart(2, '0')}:${today.getMinutes()}:${today.getSeconds()}`
             await fetch(`${this.$api}/attendances/?employee=${this.user.id}&date_created__gte=${this.one_month_date}&date_created__lte=${this.today_date}`, {
                 method: 'get',

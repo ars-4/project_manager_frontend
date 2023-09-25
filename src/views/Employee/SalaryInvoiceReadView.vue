@@ -5,7 +5,7 @@
         <h1 class="text-light heading">Salary Invoice</h1>
 
         <div class="invoice_form">
-            <h3>{{ employee.employee_username }}</h3>
+            <h3>{{ employee.username }}</h3>
             <hr>
             <div class="invoice_form_details">
                 <span>Amount Paid - {{ invoice.amount }}</span>
@@ -110,7 +110,7 @@ export default {
                     return response.json();
                 }).then(data => {
                     this.invoice = data;
-                    this.employee.id = this.invoice.person;
+                    this.employee.id = this.invoice.employee;
                     this.get_employee();
                 })
                 .catch(error => {
@@ -128,6 +128,7 @@ export default {
                 .then(response => {
                     return response.json();
                 }).then(data => {
+                    console.log(data);
                     this.employee = data;
                 })
                 .catch(error => {

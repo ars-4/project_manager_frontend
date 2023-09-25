@@ -12,6 +12,7 @@ import AttendanceCreateView from '@/views/Employee/AttendanceCreateView.vue'
 import SalaryInvoiceCreateView from '@/views/Employee/SalaryInvoiceCreateView.vue'
 import SalaryInvoiceReadView from '@/views/Employee/SalaryInvoiceReadView.vue'
 import TaskCreateView from '@/views/Task/CreateView.vue'
+import ChatRoom from '@/views/Chat/ChatRoom.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -75,6 +76,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/task/create/:id',
     name: 'task-create',
     component: TaskCreateView
+  },
+
+  {
+    path: '/chat/room/:room',
+    name: 'ChatRoom',
+    component: ChatRoom
   },
   {
     path: '/about',

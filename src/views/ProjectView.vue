@@ -12,7 +12,7 @@
         <!-- <h4>The Information:</h4> -->
         <div class="project_info">
             <span>Project Duration: {{ project.duration_left }} / {{ project.duration }}</span>
-            <span>Project Dues: {{ project.amount_left }} / {{ project.amount }}</span>
+            <span>Project Dues: {{ project.amount_left.toFixed(0) }} / {{ project.amount }}</span>
             <span>Project Totals: </span>
         </div>
         <hr>
@@ -21,9 +21,9 @@
                 <div class="members">
                     <h3>Members</h3>
                     <hr>
-                    <div v-for="member in project.members" :key="member.id">
-                        <span>{{ member.name.slice(0, 1) }}{{ member.name.slice(1, 2).toUpperCase() }}</span>
-                        <span>{{ member.name }}</span>
+                    <div v-for="employee in project.employees" :key="employee.id">
+                        <span>{{ employee.name.slice(0, 1).toUpperCase() }}{{ employee.name.slice(1, 2).toUpperCase() }}</span>
+                        <span>{{ employee.name }}</span>
                     </div>
                 </div>
             </div>
@@ -208,8 +208,6 @@
 <script>
 
 import { defineComponent } from 'vue';
-// import { Watch } from 'vue-property-decorator';
-// import { Route } from 'vue-router'
 
 export default defineComponent({
     data() {
@@ -252,13 +250,14 @@ export default defineComponent({
                 this.project.duration = this.get_duration(data['duration_start'], data['duration_end'])
                 this.project.amount = data['amount']
                 this.project.amount_left = (data['amount'] / this.project.duration) * this.project.duration_left
-                this.project.members = []
-                for (let i = 0; i < data['members'].length; i++) {
-                    this.project.members.push({
-                        id: data['members'][i],
-                        name: data['members_username'][i]
+                this.project.employees = []
+                for (let i = 0; i < data['employees'].length; i++) {
+                    this.project.employees.push({
+                        id: data['employees'][i],
+                        name: data['employees_username'][i]
                     })
                 }
+                console.log(this.project.employees)
             }).then(() => { this.get_tasks(); }).catch(e => { throw new Error(e) })
         },
 
@@ -342,11 +341,6 @@ export default defineComponent({
         // this.project.title = 'Snake'
         this.get_project()
     }
-
-    // @Watch('$route', {immediate:true, deep:true})
-    // onUrlChange(newVal: Route) {
-    //     alert("worked")
-    // }
 
 })
 

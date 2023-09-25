@@ -119,7 +119,7 @@ export default {
             }).then(res => {
                 return res.json()
             }).then(data => {
-                this.$router.push(`/project/invoices/read/${data.id}`);
+                this.$router.push(`/project/invoice/read/${data.id}`);
             }).catch(e => {
                 console.error(e);
             })

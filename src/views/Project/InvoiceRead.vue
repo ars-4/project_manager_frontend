@@ -89,6 +89,7 @@ export default {
                 return res.json()
             }).then(data => {
                 this.invoice = data;
+                this.project.id = data.project;
                 this.get_project();
             }).catch(e => {
                 console.error(e)
