@@ -3,9 +3,14 @@
         <div class="heading">
             <h1>Project: {{ project.title.slice(0, 1).toUpperCase() }}{{ project.title.slice(1) }}</h1>
             <div class="group">
-                <span class="btn btn-primary" @click="this.$router.push(`/project/invoice/create/${project.id}`)">+ <span>Invoice</span></span>
+                <span v-for="room in project.rooms" :key="room.id" class="btn btn-primary"
+                    @click="this.$router.push(`/chat/room/${room.name}`)"><span>{{ room.name }}</span></span>
                 &nbsp;
-                <span class="btn btn-primary" @click="this.$router.push(`/task/create/${project.id}`)">+ <span>Task</span></span>
+                <span class="btn btn-primary" @click="this.$router.push(`/project/invoice/create/${project.id}`)">+
+                    <span>Invoice</span></span>
+                &nbsp;
+                <span class="btn btn-primary" @click="this.$router.push(`/task/create/${project.id}`)">+
+                    <span>Task</span></span>
             </div>
         </div>
         <hr>
@@ -22,7 +27,8 @@
                     <h3>Members</h3>
                     <hr>
                     <div v-for="employee in project.employees" :key="employee.id">
-                        <span>{{ employee.name.slice(0, 1).toUpperCase() }}{{ employee.name.slice(1, 2).toUpperCase() }}</span>
+                        <span>{{ employee.name.slice(0, 1).toUpperCase() }}{{ employee.name.slice(1, 2).toUpperCase()
+                        }}</span>
                         <span>{{ employee.name }}</span>
                     </div>
                 </div>
@@ -213,7 +219,8 @@ export default defineComponent({
     data() {
         return {
             project: {
-                title: 'Snake'
+                title: 'Snake',
+                amount_left: 100,
             },
             task: 'closed',
             task_read: {}
@@ -257,8 +264,18 @@ export default defineComponent({
                         name: data['employees_username'][i]
                     })
                 }
-                console.log(this.project.employees)
+                this.get_project_rooms();
             }).then(() => { this.get_tasks(); }).catch(e => { throw new Error(e) })
+        },
+
+        get_project_rooms: async function () {
+            await fetch(`${this.$baseUri}/chats/rooms/${this.project.id}`, {
+                method: 'get',
+                headers: { 'Authorization': `Token ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }
+            }).then(res => { return res.json() }).then(data => {
+                data = data['rooms']
+                this.project.rooms = data;
+            }).catch(e => { throw new Error(e) })
         },
 
         get_duration: function (start, end) {

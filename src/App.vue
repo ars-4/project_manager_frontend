@@ -22,13 +22,13 @@
       <div class="col-md-2 side-nav">
         <br>
         <div class="main">
-          <span class="nav-links">
+          <span class="nav-links" v-if="data === 'admin'">
             <a href="#">Dashboard</a>
           </span>
           <span class="nav-links">
             <a :href="'/#/profile?user=' + token">Profile</a>
           </span>
-          <span class="nav-links">
+          <span class="nav-links" v-if="data === 'admin'">
             <a href="/#/employee/attendance/">Employee</a>
           </span>
           <span class="nav-links">
@@ -190,12 +190,13 @@ export default defineComponent({
   data() {
     return {
       logged_in: false,
-      token: localStorage.getItem('token')?.slice(3, 12) || "Snake",
+      token: "Snake",
       user: {
         user: '',
         pass: ''
       },
       msg: '',
+      data: localStorage.getItem('data') || "null",
       projects: [
         { 'name': 'terraform', 'id': '1' }
       ]
@@ -234,9 +235,12 @@ export default defineComponent({
       }).then(
         res => { return res.json() }).then(
           data => {
+            console.log(data)
             if (data['error'] && data['error'] === 'false') {
               this.flash(data['msg'])
               localStorage.setItem('token', data['token'])
+              localStorage.setItem('data', data['data'])
+              localStorage.setItem('id', data['id'])
               this.check_login();
             } else if (data['error'] && data['error'] === 'true') {
               this.flash(data['msg'])
@@ -250,7 +254,9 @@ export default defineComponent({
 
     get_projects: async function () {
       this.projects = []
-      await fetch(`${this.$api}/projects/`, {
+      let url_to_fetch = `${this.$api}/projects/`
+      this.data === 'admin' ? url_to_fetch = `${this.$api}/projects/` : url_to_fetch = `${this.$api}/projects/?user=${localStorage.getItem('id')}`
+      await fetch(`${url_to_fetch}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` },
       }).then(

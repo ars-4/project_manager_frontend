@@ -7,7 +7,7 @@ import './assets/css/global.styles.css'
 const app = createApp(App)
 
 app.config.globalProperties.$baseUri = "http://127.0.0.1:8000";
-app.config.globalProperties.$api = "http://127.0.0.1:8000/api";
+app.config.globalProperties.$api = `${app.config.globalProperties.$baseUri}/api`;
 
 app.use(router)
 app.mount('#app')
