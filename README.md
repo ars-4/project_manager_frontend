@@ -28,3 +28,21 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Features
+- <b>Project Management</b>
+    - B2B Client Based Hierarchy
+    - Real Time Tasks
+    - Kanban Board
+    - Project Invoice And Billing
+- <b>Employee Management</b>
+    - Attendance Management
+    - Salary Invoices
+    - Tasks And Tickets
+- <b>Chat Support</b>
+    - Project Wide Chat
+    - Client Chat
+    - Direct Chat
+
+
+---

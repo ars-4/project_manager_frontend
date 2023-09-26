@@ -19,7 +19,7 @@
                     <br>
                     <button class="btn btn-primary" @click="update_user">Update</button>
                     <button class="btn btn-danger" @click="reload">Delete</button>&nbsp;&nbsp;
-                    <a @click="$router.push(`/employee/invoice/create/${user.id}`)" class="btn btn-success">+ Invoice</a>
+                    <a v-if="username == 'admin'" @click="$router.push(`/employee/invoice/create/${user.id}`)" class="btn btn-success">+ Invoice</a>
                     <button class="btn btn-primary" @click="reload">Last Invoice</button>
                 </div>
                 <div class="col-md-1"></div>
@@ -216,7 +216,7 @@ export default defineComponent({
                 headers: {'Authorization': `Token ${token}`}
             }).then( res=>{return res.json()} ).then(data=>{
                 this.user = data;
-                this.user.profile_picture = this.$baseUri + "/" + data['profile_picture'];
+                this.user.profile_picture = this.$baseUri + data['profile_picture'];
             }).catch(e=>{throw new Error(e)});
             this.get_attendances()
         },
