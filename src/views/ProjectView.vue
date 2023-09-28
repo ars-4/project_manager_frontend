@@ -4,7 +4,7 @@
             <h1>Project: {{ project.title.slice(0, 1).toUpperCase() }}{{ project.title.slice(1) }}</h1>
             <div class="group">
                 <span v-for="room in project.rooms" :key="room.id" class="btn btn-primary"
-                    @click="this.$router.push(`/chat/room/${room.name}`)"><span>{{ room.name }}</span></span>
+                    @click="this.$router.push(`/chat/room/${room.name}`)"><span>Project Chat</span></span>
                 &nbsp;
                 <span class="btn btn-primary" @click="this.$router.push(`/project/invoice/create/${project.id}`)">+
                     <span>Invoice</span></span>
@@ -18,7 +18,7 @@
         <div class="project_info">
             <span>Project Duration: {{ project.duration_left }} / {{ project.duration }}</span>
             <span>Project Dues: {{ project.amount_left.toFixed(0) }} / {{ project.amount }}</span>
-            <span>Project Totals: </span>
+            <span>Project Amount Paid: {{ this.project.amount_paid.toFixed(0) }} / {{ project.amount }}</span>
         </div>
         <hr>
         <div class="row">
@@ -264,6 +264,7 @@ export default defineComponent({
                         name: data['employees_username'][i]
                     })
                 }
+                this.get_previous_invoices();
                 this.get_project_rooms();
             }).then(() => { this.get_tasks(); }).catch(e => { throw new Error(e) })
         },
@@ -286,6 +287,22 @@ export default defineComponent({
             let dys = Number(e_[2]) - Number(d_[2])
             let res = dys + mnths + yrs;
             return res
+        },
+
+        get_previous_invoices: async function(){
+            await fetch(`${this.$api}/project_invoices/?project=${this.project.id}`, {
+                method: 'get',
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('token')}`
+                }
+            }).then(res => { return res.json() }).then(data => {
+                this.project.previous_invoices = data;
+                this.project.amount_paid = 0;
+                for(let i = 0; i < data.length; i++) {
+                    this.project.amount_paid += Number(data[i]['amount']) 
+                }
+                this.project.amount_left = Number(this.project.amount) - this.project.amount_paid;
+            }).catch(e => { throw new Error(e) })
         },
 
         get_tasks: async function () {
