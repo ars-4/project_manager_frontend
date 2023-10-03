@@ -2,13 +2,15 @@
     <div class="row employee-create">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <h2>Register <br> <h5>a new Employee</h5></h2>
+            <h2>Register <br>
+                <h5>a new Employee</h5>
+            </h2>
             <div class="form row">
                 <div class="col-md-5">
                     <input type="text" class="form-control" placeholder="Choose a username" v-model="employee.user">
                 </div>
                 <div class="col-md-7">
-                    <input type="file" class="form-control">
+                    <input type="file" class="form-control" @change="handleFileUpload($event)">
                 </div>
                 <br>
                 <div class="col-md-6">
@@ -83,29 +85,39 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
 
-    data(){return {
-        employee: {
-            user: '',
-            first_name:'',
-            last_name:'',
-            pass:'Qwerty@234',
-            email:'',
-            mobile:'',
-            address:'',
-            city:'Lahore',
-            salar:'',
-            designation:''
+    data() {
+        return {
+            employee: {
+                user: '',
+                first_name: '',
+                last_name: '',
+                pass: 'Qwerty@234',
+                email: '',
+                mobile: '',
+                address: '',
+                city: 'Lahore',
+                salar: '',
+                designation: ''
+            },
+            profile_picture: 'null'
         }
-    }},
+    },
 
     methods: {
-        create_employee: function() {
+        handleFileUpload: function (e) {
+            this.profile_picture = e.target.files[0];
+        },
+        create_employee: function () {
+            let formData = new FormData();
+            formData.append('employee', JSON.stringify(this.employee))
+            formData.append('picture', this.profile_picture)
             fetch(`${this.$api}/employees/`, {
-                method:'post',
-                headers:{'Content-Type':'application/json',
-                        'Authorization': `Token ${localStorage.getItem('token')}`},
-                body: JSON.stringify(this.employee)
-            }).then(res=>res.json()).then(data=>{console.log(data); this.$router.go(-1)}).catch(e=>{throw new Error(e)})
+                method: 'post',
+                headers: {
+                    'Authorization': `Token ${localStorage.getItem('token')}`
+                },
+                body: formData
+            }).then(res => res.json()).then(data => { console.log(data); this.$router.go(-1) }).catch(e => { throw new Error(e) })
         }
     }
 

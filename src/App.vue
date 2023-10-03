@@ -254,8 +254,8 @@ export default defineComponent({
 
     get_projects: async function () {
       this.projects = []
-      let url_to_fetch = `${this.$api}/projects/`
-      this.data === 'admin' ? url_to_fetch = `${this.$api}/projects/` : url_to_fetch = `${this.$api}/projects/?user=${localStorage.getItem('id')}`
+      let url_to_fetch = `${this.$api}/projects/?employees=${localStorage.getItem('id')}`
+      this.data === 'admin' ? url_to_fetch = `${this.$api}/projects/` : url_to_fetch = `${this.$api}/projects/?employees=${localStorage.getItem('id')}`
       await fetch(`${url_to_fetch}`, {
         method: 'get',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` },

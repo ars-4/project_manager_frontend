@@ -19,12 +19,16 @@
                     <br>
                     <button class="btn btn-primary" @click="update_user">Update</button>
                     <button class="btn btn-danger" @click="reload">Delete</button>&nbsp;&nbsp;
-                    <a v-if="username == 'admin'" @click="$router.push(`/employee/invoice/create/${user.id}`)" class="btn btn-success">+ Invoice</a>
+                    <a v-if="username == 'admin'" @click="$router.push(`/employee/invoice/create/${user.id}`)"
+                        class="btn btn-success">+ Invoice</a>
                     <button class="btn btn-primary" @click="reload">Last Invoice</button>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-4 image">
-                    <img :src="user.profile_picture" alt="profile">
+                    <label>
+                        <img :src="user.profile_picture" alt="profile">
+                        <input type="file" hidden @change="handleFileUpload($event)">
+                    </label>
                 </div>
             </div>
         </div>
@@ -40,7 +44,7 @@
                         </tr>
                         <tr v-for="task in tasks_d">
                             <td>{{ task.date_created }}</td>
-                            <td>{{task.status}}</td>
+                            <td>{{ task.status }}</td>
                             <td>{{ task.title }}</td>
                         </tr>
                     </table>
@@ -174,6 +178,7 @@
 .company .perfomance .row .col-4 span:nth-child(1) {
     font-size: 12px;
 }
+
 .company .perfomance .salary-count span {
     text-align: center;
     font-size: 12px;
@@ -212,25 +217,33 @@ export default defineComponent({
         get_user: async function () {
             let token = localStorage.getItem('token');
             await fetch(`${this.$api}/get_profile/`, {
-                method:'get',
-                headers: {'Authorization': `Token ${token}`}
-            }).then( res=>{return res.json()} ).then(data=>{
+                method: 'get',
+                headers: { 'Authorization': `Token ${token}` }
+            }).then(res => { return res.json() }).then(data => {
                 this.user = data;
                 this.user.profile_picture = this.$baseUri + data['profile_picture'];
-            }).catch(e=>{throw new Error(e)});
+            }).catch(e => { throw new Error(e) });
             this.get_attendances()
+            this.user.profile_picture_file = this.user.profile_picture;
         },
 
-        update_user: async function() {
+        handleFileUpload: function (e) {
+            this.user.profile_picture_file = e.target.files[0];
+        },
+
+        update_user: async function () {
             let token = localStorage.getItem('token');
+            let formData = new FormData();
+            formData.append('user', JSON.stringify(this.user))
+            formData.append('file', this.user.profile_picture_file)
             await fetch(`${this.$api}/update_profile/`, {
-                method:'post',
-                headers: {'Authorization': `Token ${token}`, 'Content-Type':'application/json'},
-                body: JSON.stringify(this.user)
-            }).then( res=>{ console.log(res.json()) } ).then( this.$router.go() ).catch(e=>{throw new Error(e)})
+                method: 'post',
+                headers: { 'Authorization': `Token ${token}` },
+                body: formData
+            }).then(res => { console.log(res.json()) }).then(this.$router.go()).catch(e => { throw new Error(e) })
         },
 
-        get_attendances: async function() {
+        get_attendances: async function () {
             this.attendances = []
             await this.get_last_invoice()
             this.get_tasks()
@@ -242,10 +255,10 @@ export default defineComponent({
                     'Content-Type': 'application/json',
                     'Authorization': `Token ${localStorage.getItem('token')}`
                 }
-            }).then(res=>{
+            }).then(res => {
                 return res.json()
-            }).then(data=>{
-                for(let attendance of data) {
+            }).then(data => {
+                for (let attendance of data) {
                     switch (attendance['status']) {
                         case 'present':
                             this.presents++;
@@ -259,11 +272,11 @@ export default defineComponent({
                         default:
                             break;
                     }
-                    let date = attendance['date_created'].slice(0,10);
-                    let time = attendance['date_created'].slice(11,16);
+                    let date = attendance['date_created'].slice(0, 10);
+                    let time = attendance['date_created'].slice(11, 16);
                     this.attendances.push({
-                        date_created : date + ' ' + time,
-                        status :attendance['status']
+                        date_created: date + ' ' + time,
+                        status: attendance['status']
                     })
                 }
                 let day_salary = this.user.salary / 30;
@@ -272,16 +285,16 @@ export default defineComponent({
             })
         },
 
-        get_last_invoice: async function() {
+        get_last_invoice: async function () {
             await fetch(`${this.$api}/salary_invoices/`, {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Token ${localStorage.getItem('token')}`
                 }
-            }).then(res=>{return res.json()}).then(data=>{
+            }).then(res => { return res.json() }).then(data => {
                 this.one_month_date = data[0]['date_created'].slice(0, 19).replace('T', ' ')
-            }).catch(e=>{console.error(e)})
+            }).catch(e => { console.error(e) })
         },
 
         get_tasks: async function () {
@@ -313,7 +326,7 @@ export default defineComponent({
             }).catch(e => { throw new Error(e) })
         },
 
-        reload: function() {
+        reload: function () {
             this.$router.go()
         }
     },
